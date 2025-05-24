@@ -9,10 +9,10 @@
  * see https://docs.magicmirror.builders/configuration/introduction.html#enviromnent-variables
  */
 let config = {
-	address: "localhost",
-	port: 8080,
+	address: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
+	port: process.env.PORT || 8080,
 	basePath: "/",
-	ipWhitelist: ["127.0.0.1", "localhost", "::1", "::ffff:127.0.0.1"],
+	ipWhitelist: process.env.NODE_ENV === "production" ? [] : ["127.0.0.1", "localhost", "::1", "::ffff:127.0.0.1"],
 	useHttps: false,
 	httpsPrivateKey: "",
 	httpsCertificate: "",
@@ -46,13 +46,55 @@ let config = {
 			config: {
 				calendars: [
 					{
-						url: "https://calendar.google.com/calendar/ical/de.german%23holiday%40group.v.calendar.google.com/public/basic.ics",
+						url: "webcal://p110-caldav.icloud.com/published/2/MTQxNzEyMDIxMzE0MTcxMsCRHKyOcSbTo_Y1Y6bdHQm5FfWAM4wHSv7UetJzXLcKHdYp3bSFuKG_DyFjXIT74dkaDxUqsE3nKPv5AUmcD7k",
 						symbol: "calendar",
 						maximumEntries: 20,
 						maximumNumberOfDays: 90,
 						displaySymbol: true,
 						displayRepeatingCountTitle: true,
 						defaultSymbol: "calendar",
+						showEnd: true,
+						tableClass: "small",
+						fetchInterval: 10 * 1000
+					},
+					{
+						url: process.env.NODE_ENV === "production" 
+							? "https://magicmirror-web.onrender.com/modules/calendars/9bd8ca4bab3a207ac7131dcd74662444eff9d2825e0c1db36df934cdaacf39f9.ics"
+							: "http://localhost:8080/modules/calendars/9bd8ca4bab3a207ac7131dcd74662444eff9d2825e0c1db36df934cdaacf39f9.ics",
+						symbol: "music",
+						maximumEntries: 20,
+						maximumNumberOfDays: 90,
+						displaySymbol: true,
+						displayRepeatingCountTitle: true,
+						defaultSymbol: "music",
+						showEnd: true,
+						tableClass: "small",
+						fetchInterval: 10 * 1000
+					},
+					{
+						url: process.env.NODE_ENV === "production"
+							? "https://magicmirror-web.onrender.com/modules/calendars/5fb18d02-d3b4-4ac4-972e-71aa659f3747.ics"
+							: "http://localhost:8080/modules/calendars/5fb18d02-d3b4-4ac4-972e-71aa659f3747.ics",
+						symbol: "bell",
+						maximumEntries: 20,
+						maximumNumberOfDays: 90,
+						displaySymbol: true,
+						displayRepeatingCountTitle: true,
+						defaultSymbol: "bell",
+						showEnd: true,
+						tableClass: "small",
+						fetchInterval: 10 * 1000
+					},
+					{
+						url: process.env.NODE_ENV === "production"
+							? "https://magicmirror-web.onrender.com/modules/calendars/1F40C600-869F-4DEA-9724-99A30AC3FA6B.ics"
+							: "http://localhost:8080/modules/calendars/1F40C600-869F-4DEA-9724-99A30AC3FA6B.ics",
+						symbol: "user",
+						maximumEntries: 20,
+						maximumNumberOfDays: 90,
+						displaySymbol: true,
+						displayRepeatingCountTitle: true,
+						defaultSymbol: "user",
 						showEnd: true,
 						tableClass: "small",
 						fetchInterval: 10 * 1000
