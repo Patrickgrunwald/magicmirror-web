@@ -1,0 +1,13 @@
+{
+  "name": "magicmirror-web",
+  "version": "1.0.0",
+  "description": "MagicMirror Web Version",
+  "main": "MagicMirror/serveronly/index.js",
+  "scripts": {
+    "start": "cd MagicMirror && node serveronly/index.js",
+    "install": "cd MagicMirror && npm install"
+  },
+  "engines": {
+    "node": ">=22.14.0"
+  }
+} 
