@@ -9,26 +9,17 @@
  * see https://docs.magicmirror.builders/configuration/introduction.html#enviromnent-variables
  */
 let config = {
-	address: "localhost",	// Address to listen on, can be:
-							// - "localhost", "127.0.0.1", "::1" to listen on loopback interface
-							// - another specific IPv4/6 to listen on a specific interface
-							// - "0.0.0.0", "::" to listen on any interface
-							// Default, when address config is left out or empty, is "localhost"
-	port: 8080,
+	address: "0.0.0.0",	// Änderung für Render.com
+	port: process.env.PORT || 8080,	// Dynamischer Port für Render.com
 	basePath: "/",	// The URL path where MagicMirror² is hosted. If you are using a Reverse proxy
 									// you must set the sub path here. basePath must end with a /
-	ipWhitelist: ["127.0.0.1", "::ffff:127.0.0.1", "::1"],	// Set [] to allow all IP addresses
-									// or add a specific IPv4 of 192.168.1.5 :
-									// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.1.5"],
-									// or IPv4 range of 192.168.3.0 --> 192.168.3.15 use CIDR format :
-									// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.3.0/28"],
-
+	ipWhitelist: [],	// Erlaube alle IPs für öffentlichen Zugriff
 	useHttps: false,			// Support HTTPS or not, default "false" will use HTTP
 	httpsPrivateKey: "",	// HTTPS private key path, only require when useHttps is true
 	httpsCertificate: "",	// HTTPS Certificate path, only require when useHttps is true
 
-	language: "en",
-	locale: "en-US",   // this variable is provided as a consistent location
+	language: "de",
+	locale: "de-DE",   // this variable is provided as a consistent location
 			   // it is currently only used by 3rd party modules. no MagicMirror code uses this value
 			   // as we have no usage, we  have no constraints on what this field holds
 			   // see https://en.wikipedia.org/wiki/Locale_(computer_software) for the possibilities
@@ -51,41 +42,87 @@ let config = {
 		},
 		{
 			module: "calendar",
-			header: "US Holidays",
+			header: "Kalender",
 			position: "top_left",
 			config: {
 				calendars: [
 					{
-						fetchInterval: 7 * 24 * 60 * 60 * 1000,
-						symbol: "calendar-check",
-						url: "https://ics.calendarlabs.com/76/mm3137/US_Holidays.ics"
+						url: "webcal://p110-caldav.icloud.com/published/2/MTQxNzEyMDIxMzE0MTcxMsCRHKyOcSbTo_Y1Y6bdHQm5FfWAM4wHSv7UetJzXLcKHdYp3bSFuKG_DyFjXIT74dkaDxUqsE3nKPv5AUmcD7k",
+						symbol: "calendar",
+						maximumEntries: 20,
+						maximumNumberOfDays: 90,
+						displaySymbol: true,
+						displayRepeatingCountTitle: true,
+						defaultSymbol: "calendar",
+						showEnd: true,
+						tableClass: "small",
+						fetchInterval: 10 * 1000 // Aktualisierung alle 10 Sekunden
+					},
+					{
+						url: "http://localhost:8080/modules/calendars/9bd8ca4bab3a207ac7131dcd74662444eff9d2825e0c1db36df934cdaacf39f9.ics",
+						symbol: "music",
+						maximumEntries: 20,
+						maximumNumberOfDays: 90,
+						displaySymbol: true,
+						displayRepeatingCountTitle: true,
+						defaultSymbol: "music",
+						showEnd: true,
+						tableClass: "small",
+						fetchInterval: 10 * 1000 // Aktualisierung alle 10 Sekunden
+					},
+					{
+						url: "http://localhost:8080/modules/calendars/5fb18d02-d3b4-4ac4-972e-71aa659f3747.ics",
+						symbol: "bell",
+						maximumEntries: 20,
+						maximumNumberOfDays: 90,
+						displaySymbol: true,
+						displayRepeatingCountTitle: true,
+						defaultSymbol: "bell",
+						showEnd: true,
+						tableClass: "small",
+						fetchInterval: 10 * 1000 // Aktualisierung alle 10 Sekunden
+					},
+					{
+						url: "http://localhost:8080/modules/calendars/1F40C600-869F-4DEA-9724-99A30AC3FA6B.ics",
+						symbol: "user",
+						maximumEntries: 20,
+						maximumNumberOfDays: 90,
+						displaySymbol: true,
+						displayRepeatingCountTitle: true,
+						defaultSymbol: "user",
+						showEnd: true,
+						tableClass: "small",
+						fetchInterval: 10 * 1000 // Aktualisierung alle 10 Sekunden
 					}
 				]
 			}
 		},
 		{
-			module: "compliments",
-			position: "lower_third"
-		},
-		{
 			module: "weather",
 			position: "top_right",
+			header: "Aktuelles Wetter",
 			config: {
 				weatherProvider: "openmeteo",
 				type: "current",
-				lat: 40.776676,
-				lon: -73.971321
+				lat: 48.9475,
+				lon: 8.8367,
+				location: "Mühlacker",
+				locationID: "",
+				apiKey: ""
 			}
 		},
 		{
 			module: "weather",
 			position: "top_right",
-			header: "Weather Forecast",
+			header: "Wettervorhersage",
 			config: {
 				weatherProvider: "openmeteo",
 				type: "forecast",
-				lat: 40.776676,
-				lon: -73.971321
+				lat: 48.9475,
+				lon: 8.8367,
+				location: "Mühlacker",
+				locationID: "",
+				apiKey: ""
 			}
 		},
 		{
@@ -94,14 +131,25 @@ let config = {
 			config: {
 				feeds: [
 					{
-						title: "New York Times",
-						url: "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
+						title: "Tagesschau",
+						url: "https://www.tagesschau.de/xml/rss2"
+					},
+					{
+						title: "Spiegel Online",
+						url: "https://www.spiegel.de/schlagzeilen/index.rss"
+					},
+					{
+						title: "Süddeutsche Zeitung",
+						url: "https://rss.sueddeutsche.de/rss/Topthemen"
 					}
 				],
 				showSourceTitle: true,
 				showPublishDate: true,
 				broadcastNewsFeeds: true,
-				broadcastNewsUpdates: true
+				broadcastNewsUpdates: true,
+				updateInterval: 10 * 60 * 1000, // Aktualisierung alle 10 Minuten
+				maxNewsItems: 5, // Maximale Anzahl der angezeigten Nachrichten
+				showDescription: true
 			}
 		},
 	]
